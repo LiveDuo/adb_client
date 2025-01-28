@@ -137,10 +137,6 @@ fn main() -> Result<()> {
             log::info!("Uninstalling the package {}...", package);
             device.uninstall(&package)?;
         }
-        DeviceCommands::Framebuffer { path } => {
-            device.framebuffer(&path)?;
-            log::info!("Successfully dumped framebuffer at path {path}");
-        }
     }
 
     Ok(())

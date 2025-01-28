@@ -25,7 +25,6 @@ pub(crate) enum AdbServerCommand {
     // Local commands
     ShellCommand(String),
     Shell,
-    FrameBuffer,
     Sync,
     Reboot(RebootType),
     Forward(String, String),
@@ -65,7 +64,6 @@ impl Display for AdbServerCommand {
             AdbServerCommand::Pair(addr, code) => {
                 write!(f, "host:pair:{code}:{addr}")
             }
-            AdbServerCommand::FrameBuffer => write!(f, "framebuffer:"),
             AdbServerCommand::Forward(remote, local) => {
                 write!(f, "host:forward:{local};{remote}")
             }

@@ -1,5 +1,4 @@
 mod forward;
-mod framebuffer;
 mod host_features;
 mod install;
 mod uninstall;

@@ -38,9 +38,4 @@ pub enum DeviceCommands {
         /// Name of the package to uninstall
         package: String,
     },
-    /// Dump framebuffer of device
-    Framebuffer {
-        /// Framebuffer image destination path
-        path: String,
-    },
 }

@@ -1,7 +1,5 @@
-use std::io::{Cursor, Read, Write};
+use std::io::{Read, Write};
 use std::path::Path;
-
-use image::{ImageBuffer, ImageFormat, Rgba};
 
 use crate::models::AdbStatResponse;
 use crate::{RebootType, Result};
@@ -43,27 +41,6 @@ pub trait ADBDeviceExt {
 
     /// Uninstall the package `package` from device.
     fn uninstall(&mut self, package: &str) -> Result<()>;
-
-    /// Inner method requesting framebuffer from an Android device
-    fn framebuffer_inner(&mut self) -> Result<ImageBuffer<Rgba<u8>, Vec<u8>>>;
-
-    /// Dump framebuffer of this device into given path
-    fn framebuffer(&mut self, path: &dyn AsRef<Path>) -> Result<()> {
-        // Big help from AOSP source code (<https://android.googlesource.com/platform/system/adb/+/refs/heads/main/framebuffer_service.cpp>)
-        let img = self.framebuffer_inner()?;
-        Ok(img.save(path.as_ref())?)
-    }
-
-    /// Dump framebuffer of this device and return corresponding bytes.
-    ///
-    /// Output data format is currently only `PNG`.
-    fn framebuffer_bytes(&mut self) -> Result<Vec<u8>> {
-        let img = self.framebuffer_inner()?;
-        let mut vec = Cursor::new(Vec::new());
-        img.write_to(&mut vec, ImageFormat::Png)?;
-
-        Ok(vec.into_inner())
-    }
 
     /// Return a boxed instance representing this trait
     fn boxed(self) -> Box<dyn ADBDeviceExt>
