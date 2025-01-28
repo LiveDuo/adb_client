@@ -1,10 +1,8 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader, Error, ErrorKind, Read, Write},
-    net::{SocketAddrV4, TcpStream},
+    net::{SocketAddrV4, TcpStream}, path::PathBuf,
 };
-
-use homedir::my_home;
 
 use super::ADBTransport;
 use crate::{emulator_device::ADBEmulatorCommand, Result, RustADBError};
@@ -36,7 +34,7 @@ impl TCPEmulatorTransport {
 
     /// Return authentication token stored in $HOME/.emulator_console_auth_token
     pub fn get_authentication_token(&mut self) -> Result<String> {
-        let home = match my_home()? {
+        let home = match std::env::var_os("HOME").map(PathBuf::from) {
             Some(home) => home,
             None => return Err(RustADBError::NoHomeDirectory),
         };

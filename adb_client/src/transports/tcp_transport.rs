@@ -8,7 +8,7 @@ use rustls::{
 use super::{ADBMessageTransport, ADBTransport};
 use crate::{
     device::{
-        get_default_adb_key_path, ADBTransportMessage, ADBTransportMessageHeader, MessageCommand,
+        ADBTransportMessage, ADBTransportMessageHeader, MessageCommand,
     },
     Result, RustADBError,
 };
@@ -21,6 +21,13 @@ use std::{
     sync::{Arc, Mutex},
     time::Duration,
 };
+
+pub fn get_default_adb_key_path() -> Result<PathBuf> {
+    std::env::var_os("HOME")
+        .map(PathBuf::from)
+        .map(|home| home.join(".android").join("adbkey"))
+        .ok_or(RustADBError::NoHomeDirectory)
+}
 
 #[derive(Debug)]
 enum CurrentConnection {
